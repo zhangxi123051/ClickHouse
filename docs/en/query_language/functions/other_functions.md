@@ -249,7 +249,7 @@ ORDER BY h ASC
 Transforms a value according to the explicitly defined mapping of some elements to other ones.
 There are two variations of this function:
 
-1. `transform(x, array_from, array_to, default)`
+### transform(x, array_from, array_to, default)
 
 `x` – What to transform.
 
@@ -291,7 +291,7 @@ ORDER BY c DESC
 └───────────┴────────┘
 ```
 
-2. `transform(x, array_from, array_to)`
+### transform(x, array_from, array_to)
 
 Differs from the first variation in that the 'default' argument is omitted.
 If the 'x' value is equal to one of the elements in the 'array_from' array, it returns the matching element (that is numbered the same) from the 'array_to' array. Otherwise, it returns 'x'.
@@ -603,6 +603,34 @@ SELECT getSizeOfEnumType( CAST('a' AS Enum8('a' = 1, 'b' = 2) ) ) AS x
 └───┘
 ```
 
+## blockSerializedSize
+
+Returns size on disk (without taking into account compression).
+
+
+```sql
+blockSerializedSize(value[, value[, ...]])
+```
+
+**Parameters:**
+
+- `value` — Any value.
+
+**Returned values**
+
+- The number of bytes that will be written to disk for block of values (without compression).
+
+**Example**
+
+```sql
+SELECT blockSerializedSize(maxState(1)) as x
+```
+```text
+┌─x─┐
+│ 2 │
+└───┘
+```
+
 ## toColumnTypeName
 
 Returns the name of the class that represents the data type of the column in RAM.
@@ -706,109 +734,6 @@ SELECT defaultValueOfArgumentType( CAST(1 AS Nullable(Int8) ) )
 └───────────────────────────────────────────────────────┘
 ```
 
-## indexHint {#indexhint}
-
-The function is intended for debugging and introspection purposes. The function ignores it's argument and always returns 1. Arguments are not even evaluated.
-
-But for the purpose of index analysis, the argument of this function is analyzed as if it was present directly without being wrapped inside `indexHint` function. This allows to select data in index ranges by the corresponding condition but without further filtering by this condition. The index in ClickHouse is sparse and using `indexHint` will yield more data than specifying the same condition directly.
-
-**Syntax** 
-
-```sql
-SELECT * FROM table WHERE indexHint(<expression>)
-```
-
-**Returned value**
-
-1. Type: [Uint8](https://clickhouse.yandex/docs/en/data_types/int_uint/#diapazony-uint).
-
-**Example**
-
-Here is the example of test data from the table [ontime](../../getting_started/example_datasets/ontime.md).
-
-Input table:
-
-```sql
-SELECT count() FROM ontime
-```
-
-```text
-┌─count()─┐
-│ 4276457 │
-└─────────┘
-```
-
-The table has indexes on the fields `(FlightDate, (Year, FlightDate))`.
-
-Create a query, where the index is not used.
-
-Query:
-
-```sql
-SELECT FlightDate AS k, count() FROM ontime GROUP BY k ORDER BY k
-```
-
-ClickHouse processed the entire table (`Processed 4.28 million rows`). 
-
-Result:
-
-```text
-┌──────────k─┬─count()─┐
-│ 2017-01-01 │   13970 │
-│ 2017-01-02 │   15882 │
-........................
-│ 2017-09-28 │   16411 │
-│ 2017-09-29 │   16384 │
-│ 2017-09-30 │   12520 │
-└────────────┴─────────┘
-```
-
-To apply the index, select a specific date.
-
-Query:
-
-```sql
-SELECT FlightDate AS k, count() FROM ontime WHERE k = '2017-09-15' GROUP BY k ORDER BY k
-```
-
-By using the index, ClickHouse processed a significantly smaller number of rows (`Processed 32.74 thousand rows`).
-
-Result:
-
-```text
-┌──────────k─┬─count()─┐
-│ 2017-09-15 │   16428 │
-└────────────┴─────────┘
-```
-
-Now wrap the expression `k = '2017-09-15'` into `indexHint` function.
-
-Query:
-
-```sql
-SELECT
-    FlightDate AS k,
-    count()
-FROM ontime
-WHERE indexHint(k = '2017-09-15')
-GROUP BY k
-ORDER BY k ASC
-```
-
-ClickHouse used the index in the same way as the previous time (`Processed 32.74 thousand rows`). 
-The expression `k = '2017-09-15'` was not used when generating the result.
-In examle the `indexHint` function allows to see adjacent dates.
-
-Result:
-
-```text
-┌──────────k─┬─count()─┐
-│ 2017-09-14 │    7071 │
-│ 2017-09-15 │   16428 │
-│ 2017-09-16 │    1077 │
-│ 2017-09-30 │    8167 │
-└────────────┴─────────┘
-```
 
 ## replicate {#other_functions-replicate}
 
@@ -955,7 +880,7 @@ So, result of function depends on partition of data to blocks and on order of da
 
 ## joinGet {#joinget}
 
-The function lets you extract data from the table the same way as from a [dictionary](../dicts/index.md).
+The function lets you extract data from the table the same way as from a [dictionary](../../query_language/dicts/index.md).
 
 Gets data from [Join](../../operations/table_engines/join.md#creating-a-table) tables using the specified join key.
 
@@ -977,7 +902,7 @@ joinGet(join_storage_table_name, `value_column`, join_keys)
 
 Returns list of values corresponded to list of keys.
 
-If certain doesn't exist in source table then `0` or `null` will be returned based on [join_use_nulls](../../operations/settings/settings.md#join_use_nulls) setting. 
+If certain doesn't exist in source table then `0` or `null` will be returned based on [join_use_nulls](../../operations/settings/settings.md#join_use_nulls) setting.
 
 More info about `join_use_nulls` in [Join operation](../../operations/table_engines/join.md).
 

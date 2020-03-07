@@ -59,14 +59,9 @@ namespace ErrorCodes
     extern const int TABLE_ALREADY_EXISTS;
     extern const int EMPTY_LIST_OF_COLUMNS_PASSED;
     extern const int INCORRECT_QUERY;
-    extern const int ENGINE_REQUIRED;
     extern const int UNKNOWN_DATABASE_ENGINE;
     extern const int DUPLICATE_COLUMN;
-    extern const int READONLY;
-    extern const int ILLEGAL_COLUMN;
     extern const int DATABASE_ALREADY_EXISTS;
-    extern const int QUERY_IS_PROHIBITED;
-    extern const int THERE_IS_NO_DEFAULT_VALUE;
     extern const int BAD_DATABASE_FOR_TEMPORARY_TABLE;
     extern const int SUSPICIOUS_TYPE_FOR_LOW_CARDINALITY;
     extern const int DICTIONARY_ALREADY_EXISTS;
@@ -319,15 +314,7 @@ ColumnsDescription InterpreterCreateQuery::getColumnsDescription(const ASTExpres
     Block defaults_sample_block;
     /// set missing types and wrap default_expression's in a conversion-function if necessary
     if (!default_expr_list->children.empty())
-    {
-        auto syntax_analyzer_result = SyntaxAnalyzer(context).analyze(default_expr_list, column_names_and_types);
-        const auto actions = ExpressionAnalyzer(default_expr_list, syntax_analyzer_result, context).getActions(true);
-        for (auto action : actions->getActions())
-            if (action.type == ExpressionAction::Type::JOIN || action.type == ExpressionAction::Type::ARRAY_JOIN)
-                throw Exception("Cannot CREATE table. Unsupported default value that requires ARRAY JOIN or JOIN action", ErrorCodes::THERE_IS_NO_DEFAULT_VALUE);
-
-        defaults_sample_block = actions->getSampleBlock();
-    }
+        defaults_sample_block = validateColumnsDefaultsAndGetSampleBlock(default_expr_list, column_names_and_types, context);
 
     ColumnsDescription res;
     auto name_type_it = column_names_and_types.begin();
@@ -485,7 +472,7 @@ void InterpreterCreateQuery::validateTableStructure(const ASTCreateQuery & creat
 
 void InterpreterCreateQuery::setEngine(ASTCreateQuery & create) const
 {
-    if (create.storage)
+    if (create.storage || create.is_view || create.is_materialized_view || create.is_live_view || create.is_dictionary)
     {
         if (create.temporary && create.storage->engine->name != "Memory")
             throw Exception(
@@ -495,7 +482,7 @@ void InterpreterCreateQuery::setEngine(ASTCreateQuery & create) const
         return;
     }
 
-    if (create.temporary && !create.is_live_view)
+    if (create.temporary)
     {
         auto engine_ast = std::make_shared<ASTFunction>();
         engine_ast->name = "Memory";
@@ -538,17 +525,19 @@ void InterpreterCreateQuery::setEngine(ASTCreateQuery & create) const
 BlockIO InterpreterCreateQuery::createTable(ASTCreateQuery & create)
 {
     /// Temporary tables are created out of databases.
-    if (create.temporary && !create.database.empty() && !create.is_live_view)
+    if (create.temporary && !create.database.empty())
         throw Exception("Temporary tables cannot be inside a database. You should not specify a database for a temporary table.",
             ErrorCodes::BAD_DATABASE_FOR_TEMPORARY_TABLE);
 
     // If this is a stub ATTACH query, read the query definition from the database
     if (create.attach && !create.storage && !create.columns_list)
     {
+        bool if_not_exists = create.if_not_exists;
         // Table SQL definition is available even if the table is detached
         auto query = context.getDatabase(create.database)->getCreateTableQuery(context, create.table);
         create = query->as<ASTCreateQuery &>(); // Copy the saved create query, but use ATTACH instead of CREATE
         create.attach = true;
+        create.if_not_exists = if_not_exists;
     }
 
     String current_database = context.getCurrentDatabase();
@@ -583,7 +572,7 @@ bool InterpreterCreateQuery::doCreateTable(const ASTCreateQuery & create,
     DatabasePtr database;
 
     const String & table_name = create.table;
-    bool need_add_to_database = !create.temporary || create.is_live_view;
+    bool need_add_to_database = !create.temporary;
     if (need_add_to_database)
     {
         database = context.getDatabase(create.database);
@@ -618,6 +607,7 @@ bool InterpreterCreateQuery::doCreateTable(const ASTCreateQuery & create,
          return false;
 
     StoragePtr res;
+    /// NOTE: CREATE query may be rewritten by Storage creator or table function
     if (create.as_table_function)
     {
         const auto & table_function = create.as_table_function->as<ASTFunction &>();

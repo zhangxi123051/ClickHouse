@@ -1,3 +1,4 @@
+#include "Common/quoteString.h"
 #include <Common/typeid_cast.h>
 #include <Common/PODArray.h>
 #include <Core/Row.h>
@@ -47,6 +48,7 @@ namespace DB
 
 namespace ErrorCodes
 {
+    extern const int ILLEGAL_TYPE_OF_ARGUMENT;
     extern const int UNKNOWN_IDENTIFIER;
     extern const int NOT_AN_AGGREGATE;
     extern const int UNEXPECTED_EXPRESSION;
@@ -334,7 +336,7 @@ void ActionsMatcher::visit(const ASTIdentifier & identifier, const ASTPtr & ast,
                 found = true;
 
         if (found)
-            throw Exception("Column " + column_name.get(ast) + " is not under aggregate function and not in GROUP BY.",
+            throw Exception("Column " + backQuote(column_name.get(ast)) + " is not under aggregate function and not in GROUP BY",
                 ErrorCodes::NOT_AN_AGGREGATE);
 
         /// Special check for WITH statement alias. Add alias action to be able to use this alias.
@@ -396,16 +398,6 @@ void ActionsMatcher::visit(const ASTFunction & node, const ASTPtr & ast, Data & 
             }
             return;
         }
-    }
-
-    /// A special function `indexHint`. Everything that is inside it is not calculated
-    /// (and is used only for index analysis, see KeyCondition).
-    if (node.name == "indexHint")
-    {
-        data.addAction(ExpressionAction::addColumn(ColumnWithTypeAndName(
-            ColumnConst::create(ColumnUInt8::create(1, 1), 1), std::make_shared<DataTypeUInt8>(),
-                column_name.get(ast))));
-        return;
     }
 
     if (AggregateFunctionFactory::instance().isAggregateFunctionName(node.name))

@@ -207,9 +207,10 @@ ClickHouse проверит условия `min_part_size` и `min_part_size_rat
 ```
 
 
-## http_server_default_response
+## http_server_default_response {#server_settings-http_server_default_response}
 
 Страница, показываемая по умолчанию, при обращении к HTTP(s) серверу ClickHouse.
+Значение по умолчанию "Ok." (с переводом строки на конце).
 
 **Пример**
 
@@ -604,6 +605,27 @@ ClickHouse проверит условия `min_part_size` и `min_part_size_rat
 </query_thread_log>
 ```
 
+## trace_log {#server_settings-trace_log}
+
+Settings for the [trace_log](../system_tables.md#system_tables-trace_log) system table operation.
+
+Parameters:
+
+- `database` — Database for storing a table.
+- `table` — Table name.
+- `partition_by` — [Custom partitioning key](../../operations/table_engines/custom_partitioning_key.md) for a system table.
+- `flush_interval_milliseconds` — Interval for flushing data from the buffer in memory to the table.
+
+The default server configuration file `config.xml` contains the following settings section:
+
+```xml
+<trace_log>
+    <database>system</database>
+    <table>trace_log</table>
+    <partition_by>toYYYYMM(event_date)</partition_by>
+    <flush_interval_milliseconds>7500</flush_interval_milliseconds>
+</trace_log>
+```
 
 ## remote_servers {#server_settings_remote_servers}
 

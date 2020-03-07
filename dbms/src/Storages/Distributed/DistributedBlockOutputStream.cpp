@@ -14,6 +14,7 @@
 #include <DataStreams/RemoteBlockOutputStream.h>
 #include <Interpreters/InterpreterInsertQuery.h>
 #include <Interpreters/createBlockSelector.h>
+#include <Interpreters/ExpressionActions.h>
 
 #include <DataTypes/DataTypesNumber.h>
 #include <DataTypes/DataTypeLowCardinality.h>
@@ -36,7 +37,6 @@
 #include <mutex>
 
 
-
 namespace CurrentMetrics
 {
     extern const Metric DistributedSend;
@@ -53,6 +53,7 @@ namespace DB
 
 namespace ErrorCodes
 {
+    extern const int LOGICAL_ERROR;
     extern const int TIMEOUT_EXCEEDED;
     extern const int TYPE_MISMATCH;
     extern const int CANNOT_LINK;

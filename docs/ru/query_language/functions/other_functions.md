@@ -241,7 +241,7 @@ ORDER BY h ASC
 Преобразовать значение согласно явно указанному отображению одних элементов на другие.
 Имеется два варианта функции:
 
-1. `transform(x, array_from, array_to, default)`
+### transform(x, array_from, array_to, default)
 
 `x` - что преобразовывать.
 
@@ -283,7 +283,7 @@ ORDER BY c DESC
 └───────────┴────────┘
 ```
 
-2. `transform(x, array_from, array_to)`
+### transform(x, array_from, array_to)
 
 Отличается от первого варианта отсутствующим аргументом default.
 Если значение x равно одному из элементов массива array_from, то возвращает соответствующий (такой же по номеру) элемент массива array_to; иначе возвращает x.
@@ -685,111 +685,6 @@ SELECT defaultValueOfArgumentType( CAST(1 AS Nullable(Int8) ) )
 └───────────────────────────────────────────────────────┘
 ```
 
-## indexHint {#indexhint}
-
-Возвращает все данные из диапазона, в который попадают данные, соответствующие указанному выражению.
-Переданное выражение не будет вычислено. Выбор диапазона производится по индексу.
-Индекс в ClickHouse разреженный, при чтении диапазона в ответ попадают «лишние» соседние данные.
- 
-**Синтаксис** 
-
-```sql
-SELECT * FROM table WHERE indexHint(<expression>)
-```
-
-**Возвращаемое значение**
-
-Возвращает диапазон индекса, в котором выполняется заданное условие.
-
-Тип: [Uint8](https://clickhouse.yandex/docs/ru/data_types/int_uint/#diapazony-uint).
-
-**Пример**
-
-Рассмотрим пример с использованием тестовых данных таблицы [ontime](../../getting_started/example_datasets/ontime.md).
-
-Исходная таблица:
-
-```sql
-SELECT count() FROM ontime
-```
-
-```text
-┌─count()─┐
-│ 4276457 │
-└─────────┘
-```
-
-В таблице есть индексы по полям `(FlightDate, (Year, FlightDate))`. 
-
-Выполним выборку по дате, где индекс не используется.
-
-Запрос:
-
-```sql
-SELECT FlightDate AS k, count() FROM ontime GROUP BY k ORDER BY k
-```
-
-ClickHouse обработал всю таблицу (`Processed 4.28 million rows`). 
-
-Результат:
-
-```text
-┌──────────k─┬─count()─┐
-│ 2017-01-01 │   13970 │
-│ 2017-01-02 │   15882 │
-........................
-│ 2017-09-28 │   16411 │
-│ 2017-09-29 │   16384 │
-│ 2017-09-30 │   12520 │
-└────────────┴─────────┘
-```
-
-Для подключения индекса выбираем конкретную дату.
-
-Запрос:
-
-```sql
-SELECT FlightDate AS k, count() FROM ontime WHERE k = '2017-09-15' GROUP BY k ORDER BY k
-```
-
-При использовании индекса ClickHouse обработал значительно меньшее количество строк (`Processed 32.74 thousand rows`).
-
-Результат:
-
-```text
-┌──────────k─┬─count()─┐
-│ 2017-09-15 │   16428 │
-└────────────┴─────────┘
-```
-
-Передадим в функцию `indexHint` выражение `k = '2017-09-15'`.
-
-Запрос:
-
-```sql
-SELECT
-    FlightDate AS k,
-    count()
-FROM ontime
-WHERE indexHint(k = '2017-09-15')
-GROUP BY k
-ORDER BY k ASC
-```
-
-ClickHouse применил индекс по аналогии с примером выше (`Processed 32.74 thousand rows`).
-Выражение `k = '2017-09-15'` не используется при формировании результата.
-Функция `indexHint` позволяет увидеть соседние данные.
-
-Результат:
-
-```text
-┌──────────k─┬─count()─┐
-│ 2017-09-14 │    7071 │
-│ 2017-09-15 │   16428 │
-│ 2017-09-16 │    1077 │
-│ 2017-09-30 │    8167 │
-└────────────┴─────────┘
-```
 
 ## replicate {#other_functions-replicate}
 
@@ -934,7 +829,7 @@ SELECT formatReadableSize(filesystemCapacity()) AS "Capacity", toTypeName(filesy
 
 ## joinGet {#joinget}
 
-Функция позволяет извлекать данные из таблицы таким же образом как из [словаря](../dicts/index.md).
+Функция позволяет извлекать данные из таблицы таким же образом как из [словаря](../../query_language/dicts/index.md).
 
 Получает данные из таблиц [Join](../../operations/table_engines/join.md#creating-a-table) по ключу.
 
@@ -1017,15 +912,15 @@ Code: 395. DB::Exception: Received from localhost:9000. DB::Exception: Too many.
 
 ## identity {#identity}
 
-Returns the same value that was used as its argument. Used for debugging and testing, allows to cancel using index, and get the query performance of a full scan. When query is analyzed for possible use of index, the analyzer doesn't look inside `identity` functions.
+Возвращает свой аргумент. Используется для отладки и тестирования, позволяет отменить использование индекса, и получить результат и производительность полного сканирования таблицы. Это работает, потому что оптимизатор запросов не может "заглянуть" внутрь функции `identity`.
 
-**Syntax**
+**Синтаксис**
 
 ```sql
 identity(x)
 ```
 
-**Example**
+**Пример**
 
 Query:
 
@@ -1033,7 +928,7 @@ Query:
 SELECT identity(42)
 ```
 
-Result:
+Результат:
 
 ```text
 ┌─identity(42)─┐
