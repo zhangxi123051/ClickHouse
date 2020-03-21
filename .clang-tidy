@@ -58,6 +58,7 @@ Checks: '-*,
     readability-simplify-subscript-expr,
     readability-simplify-boolean-expr,
     readability-inconsistent-declaration-parameter-name,
+    readability-identifier-naming,
     
     bugprone-undelegated-constructor,
     bugprone-argument-comment,
@@ -164,26 +165,15 @@ Checks: '-*,
 '
 WarningsAsErrors: '*'
 
-# Note: the check 'readability-identifier-naming' is not enabled yet.
 CheckOptions:
   - key: readability-identifier-naming.ClassCase
     value: CamelCase
-  - key: readability-identifier-naming.ConstexprVariableCase
-    value: lower_case
   - key: readability-identifier-naming.EnumCase
     value: CamelCase
-  - key: readability-identifier-naming.EnumConstantCase
-    value: UPPER_CASE
-  - key: readability-identifier-naming.FunctionCase
-    value: camelBack
-  - key: readability-identifier-naming.GlobalFunctionCase
-    value: camelBack
-  - key: readability-identifier-naming.InlineNamespaceCase
-    value: CamelCase
-  - key: readability-identifier-naming.LocalConstantCase
-    value: lower_case
   - key: readability-identifier-naming.LocalVariableCase
     value: lower_case
+  - key: readability-identifier-naming.StaticConstantCase
+    value: aNy_CasE
   - key: readability-identifier-naming.MemberCase
     value: lower_case
   - key: readability-identifier-naming.PrivateMemberPrefix
@@ -198,22 +188,10 @@ CheckOptions:
     value: ''
   - key: readability-identifier-naming.ProtectedMethodPrefix
     value: ''
-  - key: readability-identifier-naming.NamespaceCase
-    value: CamelCase
-  - key: readability-identifier-naming.ParameterCase
-    value: lower_case
-  - key: readability-identifier-naming.ConstantParameterCase
-    value: lower_case
   - key: readability-identifier-naming.ParameterPackCase
-    value: lower_case
-  - key: readability-identifier-naming.StaticConstantCase
-    value: lower_case
-  - key: readability-identifier-naming.StaticVariableCase
     value: lower_case
   - key: readability-identifier-naming.StructCase
     value: CamelCase
-  - key: readability-identifier-naming.TemplateParameterCase
-    value: UPPER_CASE
   - key: readability-identifier-naming.TemplateTemplateParameterCase
     value: CamelCase
   - key: readability-identifier-naming.TemplateUsingCase
@@ -226,9 +204,3 @@ CheckOptions:
     value: CamelCase
   - key: readability-identifier-naming.UsingCase
     value: CamelCase
-  - key: readability-identifier-naming.ValueTemplateParameterCase
-    value: lower_case
-  - key: readability-identifier-naming.VariableCase
-    value: lower_case
-  - key: readability-identifier-naming.GlobalConstantCase
-    value: aNy_CasE
