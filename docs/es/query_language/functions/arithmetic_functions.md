@@ -1,3 +1,7 @@
+---
+machine_translated: true
+---
+
 # Funciones aritméticas {#arithmetic-functions}
 
 Para todas las funciones aritméticas, el tipo de resultado se calcula como el tipo de número más pequeño en el que encaja el resultado, si existe dicho tipo. El mínimo se toma simultáneamente en función del número de bits, si está firmado y si flota. Si no hay suficientes bits, se toma el tipo de bit más alto.
@@ -63,7 +67,7 @@ Difiere de ‘modulo’ en que devuelve cero cuando el divisor es cero.
 
 Calcula un número con el signo inverso. El resultado siempre está firmado.
 
-## abs (a) {#arithm-func-abs}
+## abs (a) {#arithm_func-abs}
 
 Calcula el valor absoluto del número (a). Es decir, si un \< 0, devuelve -a. Para los tipos sin signo no hace nada. Para los tipos de enteros con signo, devuelve un número sin signo.
 

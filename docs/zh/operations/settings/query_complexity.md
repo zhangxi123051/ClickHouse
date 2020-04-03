@@ -24,7 +24,7 @@ After enabling readonly mode, you can’t disable it in the current session.
 
 When using the GET method in the HTTP interface, ‘readonly = 1’ is set automatically. In other words, for queries that modify data, you can only use the POST method. You can send the query itself either in the POST body, or in the URL parameter.
 
-## max\_memory\_usage {#settings-max-memory-usage}
+## max\_memory\_usage {#settings_max_memory_usage}
 
 The maximum amount of RAM to use for running a query on a single server.
 
@@ -45,7 +45,7 @@ Memory consumption is also restricted by the parameters `max_memory_usage_for_us
 
 The maximum amount of RAM to use for running a user’s queries on a single server.
 
-Default values are defined in [Settings.h](https://github.com/ClickHouse/ClickHouse/blob/master/dbms/src/Interpreters/Settings.h#L244). By default, the amount is not restricted (`max_memory_usage_for_user = 0`).
+Default values are defined in [Settings.h](https://github.com/ClickHouse/ClickHouse/blob/master/dbms/Interpreters/Settings.h#L244). By default, the amount is not restricted (`max_memory_usage_for_user = 0`).
 
 See also the description of [max\_memory\_usage](#settings_max_memory_usage).
 
@@ -53,7 +53,7 @@ See also the description of [max\_memory\_usage](#settings_max_memory_usage).
 
 The maximum amount of RAM to use for running all queries on a single server.
 
-Default values are defined in [Settings.h](https://github.com/ClickHouse/ClickHouse/blob/master/dbms/src/Interpreters/Settings.h#L245). By default, the amount is not restricted (`max_memory_usage_for_all_queries = 0`).
+Default values are defined in [Settings.h](https://github.com/ClickHouse/ClickHouse/blob/master/dbms/Interpreters/Settings.h#L245). By default, the amount is not restricted (`max_memory_usage_for_all_queries = 0`).
 
 See also the description of [max\_memory\_usage](#settings_max_memory_usage).
 

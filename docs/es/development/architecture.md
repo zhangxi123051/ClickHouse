@@ -1,3 +1,7 @@
+---
+machine_translated: true
+---
+
 # Descripción general de la arquitectura ClickHouse {#overview-of-clickhouse-architecture}
 
 ClickHouse es un verdadero DBMS orientado a columnas. Los datos se almacenan por columnas y durante la ejecución de matrices (vectores o fragmentos de columnas). Siempre que sea posible, las operaciones se envían en matrices, en lugar de en valores individuales. Esto se llama “vectorized query execution,” y ayuda a reducir el costo del procesamiento de datos real.
@@ -24,7 +28,7 @@ Sin embargo, también es posible trabajar con valores individuales. Para represe
 
 Varias funciones en columnas se pueden implementar de una manera genérica, no eficiente utilizando `IColumn` para extraer `Field` valores, o de una manera especializada utilizando el conocimiento del diseño de la memoria interna de los datos en un `IColumn` aplicación. Para hacer esto, las funciones se convierten en un `IColumn` escriba y trate con la representación interna directamente. Por ejemplo, `ColumnUInt64` tiene el `getData` método que devuelve una referencia a una matriz interna, luego una rutina separada lee o llena esa matriz directamente. De hecho, tenemos “leaky abstractions” para permitir especializaciones eficientes de varias rutinas.
 
-## Tipos de datos {#data-types}
+## Tipos de datos {#data_types}
 
 `IDataType` es responsable de la serialización y deserialización: para leer y escribir fragmentos de columnas o valores individuales en formato binario o de texto. `IDataType` corresponde directamente a los tipos de datos en las tablas. Por ejemplo, heno `DataTypeUInt32`, `DataTypeDateTime`, `DataTypeString` y así sucesivamente.
 

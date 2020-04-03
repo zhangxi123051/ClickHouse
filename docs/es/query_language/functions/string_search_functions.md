@@ -1,3 +1,7 @@
+---
+machine_translated: true
+---
+
 # Funciones para buscar cadenas {#functions-for-searching-strings}
 
 La búsqueda distingue entre mayúsculas y minúsculas de forma predeterminada en todas estas funciones. Hay variantes separadas para la búsqueda insensible a mayúsculas y minúsculas.
@@ -259,7 +263,7 @@ Resultado:
 └───────────────────────────────────────────────────────────────────┘
 ```
 
-## MultiSearchAllPositionsUTF8 {#multisearchallpositionsutf8}
+## MultiSearchAllPositionsUTF8 {#multiSearchAllPositionsUTF8}
 
 Ver `multiSearchAllPositions`.
 

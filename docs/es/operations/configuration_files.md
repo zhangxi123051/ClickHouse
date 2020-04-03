@@ -1,4 +1,8 @@
-# Archivos de configuración {#configuration-files}
+---
+machine_translated: true
+---
+
+# Archivos de configuración {#configuration_files}
 
 ClickHouse admite la administración de configuración de varios archivos. El archivo de configuración del servidor principal es `/etc/clickhouse-server/config.xml`. Otros archivos deben estar en el `/etc/clickhouse-server/config.d` Directorio.
 

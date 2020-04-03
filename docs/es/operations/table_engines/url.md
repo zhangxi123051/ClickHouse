@@ -1,4 +1,8 @@
-# Nombre de la red inalámbrica (SSID):) {#table-engines-url}
+---
+machine_translated: true
+---
+
+# Nombre de la red inalámbrica (SSID):) {#table_engines-url}
 
 Administra datos en un servidor HTTP/HTTPS remoto. Este motor es similar
 Angeles [File](file.md) motor.

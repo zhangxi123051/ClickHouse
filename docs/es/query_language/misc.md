@@ -1,3 +1,7 @@
+---
+machine_translated: true
+---
+
 # Consultas Misceláneas {#miscellaneous-queries}
 
 ## CONECTAR {#attach}
@@ -176,7 +180,7 @@ La consulta es útil cuando una mutación está bloqueada y no puede finalizar (
 
 Los cambios ya realizados por la mutación no se revierten.
 
-## OPTIMIZAR {#misc-operations-optimize}
+## OPTIMIZAR {#misc_operations-optimize}
 
 ``` sql
 OPTIMIZE TABLE [db.]name [ON CLUSTER cluster] [PARTITION partition | PARTITION ID 'partition_id'] [FINAL] [DEDUPLICATE]
@@ -196,7 +200,7 @@ Cuando `OPTIMIZE` se utiliza con el [ReplicatedMergeTree](../operations/table_en
 !!! warning "Advertencia"
     `OPTIMIZE` no se puede arreglar el “Too many parts” error.
 
-## Renombrar {#misc-operations-rename}
+## Renombrar {#misc_operations-rename}
 
 Cambia el nombre de una o más tablas.
 

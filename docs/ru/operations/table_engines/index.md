@@ -1,4 +1,4 @@
-# Движки таблиц {#table-engines}
+# Движки таблиц {#table_engines}
 
 Движок таблицы (тип таблицы) определяет:
 
@@ -35,7 +35,7 @@
 -   [StripeLog](stripelog.md)
 -   [Log](log.md)
 
-### Движки для интергации {#dvizhki-dlia-intergatsii}
+### Движки для интеграции {#dvizhki-dlia-integratsii}
 
 Движки для связи с другими системами хранения и обработки данных.
 
@@ -63,7 +63,7 @@
 -   [Memory](memory.md)
 -   [Buffer](buffer.md)
 
-## Виртуальные столбцы {#table-engines-virtual-columns}
+## Виртуальные столбцы {#table_engines-virtual-columns}
 
 Виртуальный столбец — это неотъемлемый атрибут движка таблиц, определенный в исходном коде движка.
 

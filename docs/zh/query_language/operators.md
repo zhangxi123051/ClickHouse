@@ -146,7 +146,7 @@ FROM test.Orders;
 └───────────┴────────────┴──────────┴───────────┴─────────────┴─────────────┘
 ```
 
-You can see more examples in [tests](https://github.com/ClickHouse/ClickHouse/blob/master/dbms/tests/queries/0_stateless/00619_extract.sql).
+You can see more examples in [tests](https://github.com/ClickHouse/ClickHouse/blob/master/tests/queries/0_stateless/00619_extract.sql).
 
 ### INTERVAL {#operator-interval}
 
@@ -169,7 +169,7 @@ SELECT now() AS current_date_time, current_date_time + INTERVAL 4 DAY + INTERVAL
 -   [Interval](../data_types/special_data_types/interval.md) data type
 -   [toInterval](functions/type_conversion_functions.md#function-tointerval) type convertion functions
 
-## CASE条件表达式 {#operator-case}
+## CASE条件表达式 {#operator_case}
 
 ``` sql
 CASE [x]

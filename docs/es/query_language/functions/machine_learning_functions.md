@@ -1,6 +1,10 @@
+---
+machine_translated: true
+---
+
 # Funciones de aprendizaje automático {#machine-learning-functions}
 
-## evalMLMethod (predicción) {#machine-learning-methods-evalmlmethod}
+## evalMLMethod (predicción) {#machine_learning_methods-evalmlmethod}
 
 Predicción utilizando modelos de regresión ajustados utiliza `evalMLMethod` función. Ver enlace en `linearRegression`.
 

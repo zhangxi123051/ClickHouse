@@ -101,7 +101,7 @@ def run_vagrant_box_with_env(image_path, output_dir, ch_root):
         logging.info("Running build")
         vagrant.execute_cmd("cd ~/ClickHouse && cmake . && ninja")
         logging.info("Copying binary back")
-        vagrant.copy_from_image("~/ClickHouse/dbms/programs/clickhouse", output_dir)
+        vagrant.copy_from_image("~/ClickHouse/programs/clickhouse", output_dir)
 
 def parse_env_variables(build_type, compiler, sanitizer, package_type, image_type, cache, distcc_hosts, unbundled, split_binary, clang_tidy, version, author, official, alien_pkgs, with_coverage):
     CLANG_PREFIX = "clang"
@@ -209,7 +209,7 @@ if __name__ == "__main__":
     parser.add_argument("--clickhouse-repo-path", default="../../")
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--build-type", choices=("debug", ""), default="")
-    parser.add_argument("--compiler", choices=("clang-6.0", "clang-7", "gcc-7", "clang-8", "clang-8-darwin", "clang-8-aarch64", "gcc-8", "gcc-9"), default="gcc-7")
+    parser.add_argument("--compiler", choices=("clang-8", "clang-8-darwin", "clang-8-aarch64", "gcc-8", "gcc-9", "clang-9"), default="gcc-8")
     parser.add_argument("--sanitizer", choices=("address", "thread", "memory", "undefined", ""), default="")
     parser.add_argument("--unbundled", action="store_true")
     parser.add_argument("--split-binary", action="store_true")

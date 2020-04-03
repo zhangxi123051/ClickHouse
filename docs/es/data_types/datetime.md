@@ -1,4 +1,8 @@
-# FechaHora {#data-type-datetime}
+---
+machine_translated: true
+---
+
+# FechaHora {#data_type-datetime}
 
 Permite almacenar un instante en el tiempo, que se puede expresar como una fecha del calendario y una hora de un día.
 

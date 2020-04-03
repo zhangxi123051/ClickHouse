@@ -1,3 +1,7 @@
+---
+machine_translated: true
+---
+
 # MySQL {#mysql}
 
 Permite conectarse a bases de datos en un servidor MySQL remoto y realizar `INSERT` y `SELECT` Consultas para intercambiar datos entre ClickHouse y MySQL.
@@ -24,7 +28,7 @@ ENGINE = MySQL('host:port', 'database', 'user', 'password')
 -   `user` — Usuario de MySQL.
 -   `password` — Contraseña de usuario.
 
-## Soporte de tipos de datos {#data-types-support}
+## Soporte de tipos de datos {#data_types-support}
 
 | MySQL                             | Haga clic en Casa                           |
 |-----------------------------------|---------------------------------------------|

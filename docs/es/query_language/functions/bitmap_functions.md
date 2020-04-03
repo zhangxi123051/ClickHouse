@@ -1,3 +1,7 @@
+---
+machine_translated: true
+---
+
 # Funciones de mapa de bits {#bitmap-functions}
 
 Las funciones de mapa de bits funcionan para dos mapas de bits Cálculo del valor del objeto, es devolver un nuevo mapa de bits o cardinalidad mientras se usa el cálculo de la fórmula, como y, o, xor, y no, etc.
@@ -8,7 +12,7 @@ RoaringBitmap se envuelve en una estructura de datos, mientras que el almacenami
 
 Para obtener más información sobre RoaringBitmap, consulte: [CRoaring](https://github.com/RoaringBitmap/CRoaring).
 
-## bitmapBuild {#bitmap-functions-bitmapbuild}
+## bitmapBuild {#bitmap_functions-bitmapbuild}
 
 Construya un mapa de bits a partir de una matriz de enteros sin signo.
 
@@ -120,7 +124,7 @@ Resultado:
 └───────────────────────────┘
 ```
 
-## bitmapContains {#bitmap-functions-bitmapcontains}
+## bitmapContains {#bitmap_functions-bitmapcontains}
 
 Comprueba si el mapa de bits contiene un elemento.
 
